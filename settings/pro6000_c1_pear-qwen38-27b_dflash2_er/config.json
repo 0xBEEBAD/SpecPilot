@@ -1,0 +1,164 @@
+{
+ "setting": "pro6000_c1_pear-qwen38-27b_dflash2_er",
+ "hardware": "RTX PRO 6000 Blackwell Server (sm_120)",
+ "regime": "single request (batch 1), multi-turn LIBERO sessions, T=1 top-p 0.95, reasoning_effort xhigh",
+ "models": {
+  "target": {
+   "hf": "mit-han-lab/Qwen3.8-27B-PEAR",
+   "revision": "65176e435e5fa80a059ebfafaf8215e6ad00a83e",
+   "dir": "Qwen3.8-27B-PEAR"
+  },
+  "drafter": {
+   "hf": "z-lab/Qwen3.8-27B-DFlash2",
+   "revision": "50307d4c4cde6860d4eee73e2547cd786fe8e8a4",
+   "dir": "Qwen3.8-27B-DFlash2"
+  }
+ },
+ "precision": "bf16",
+ "concurrency_levels": [
+  1
+ ],
+ "keep_special_tokens": false,
+ "dspark": false,
+ "stock": {
+  "block_size": 16,
+  "server_flags": [
+   "--dtype",
+   "bfloat16",
+   "--kv-cache-dtype",
+   "auto",
+   "--mamba-ssm-dtype",
+   "float32",
+   "--attention-backend",
+   "triton",
+   "--mem-fraction-static",
+   "0.91",
+   "--max-running-requests",
+   "1",
+   "--cuda-graph-max-bs-decode",
+   "1",
+   "--chunked-prefill-size",
+   "8192",
+   "--context-length",
+   "131072"
+  ],
+  "spec_flags": [
+   "--speculative-algorithm",
+   "DFLASH"
+  ],
+  "ar_flags": [],
+  "server_env": {}
+ },
+ "final": {
+  "name": "d5-009-f",
+  "block_size": 32,
+  "launch_args": [
+   "--mamba-radix-cache-strategy",
+   "extra_buffer",
+   "--mamba-track-interval",
+   "256",
+   "--max-mamba-cache-size",
+   "12",
+   "--enable-cache-report",
+   "--mm-preprocess-cache-size-mb",
+   "4096"
+  ],
+  "env": {
+   "SPECPILOT_D1G_FUSE": "1",
+   "SPECPILOT_D1_CHAIN_CERT": "0",
+   "SPECPILOT_D2A_KATTN": "1",
+   "SPECPILOT_D2A_KPREFILL": "1",
+   "SPECPILOT_D2G_QGATE": "1",
+   "SPECPILOT_D2_EARLY": "15",
+   "SPECPILOT_D2_W12": "1",
+   "SPECPILOT_D2_W12_HEAD": "1",
+   "SPECPILOT_D2_W12_OUT": "1",
+   "SPECPILOT_D2_W12_PREFILL": "0",
+   "SPECPILOT_D3M_BLEND": "0",
+   "SPECPILOT_D3M_CALIB": "1",
+   "SPECPILOT_D3_QBITS_IN": "6",
+   "SPECPILOT_D3_QBITS_MLP": "6",
+   "SPECPILOT_D3_QBITS_REST": "8",
+   "SPECPILOT_D3_QCOPY": "1",
+   "SPECPILOT_D4_HEAD": "off",
+   "SPECPILOT_D4_L2PF": "1",
+   "SPECPILOT_D4_L2PF_CTA": "16",
+   "SPECPILOT_D4_L2PF_GU": "0",
+   "SPECPILOT_D4_L2PF_OF": "100",
+   "SPECPILOT_D4_L2PF_POL": "2",
+   "SPECPILOT_D4_L2PF_QCTA": "32",
+   "SPECPILOT_D4_L2PF_QGU": "64",
+   "SPECPILOT_D4_QHEAD": "1",
+   "SPECPILOT_D4_QVIEW": "1",
+   "SPECPILOT_D4_TAILSKIP": "1",
+   "SPECPILOT_D5_SPLITKV": "1",
+   "SPECPILOT_D5_SPLITKV_CFG": "48,32,32,4",
+   "SPECPILOT_D5_SPLITKV_DRAFT": "1",
+   "SPECPILOT_D7_ACCEPT": "1",
+   "SPECPILOT_D7_HEAD_FMT": "sym",
+   "SPECPILOT_D7_W4": "all",
+   "SPECPILOT_D7_W4_FMT": "asym",
+   "SPECPILOT_D7_W4_G": "128",
+   "SPECPILOT_D8R_TLV": "1",
+   "SPECPILOT_DB_RA_CONV": "tm",
+   "SPECPILOT_DB_RA_CONV_PAR1": "1",
+   "SPECPILOT_DB_RA_NOSPLIT": "1",
+   "SPECPILOT_DE_DRAFTER_PREC": "fp8",
+   "SPECPILOT_DE_HEAD_PREC": "fp8",
+   "SPECPILOT_K001_SAMPLE": "1",
+   "SPECPILOT_K001_SAMPLE_COUPLE": "1",
+   "SPECPILOT_K001_SAMPLE_DRAFT": "0",
+   "SPECPILOT_K_COMMIT_BV": "8",
+   "SPECPILOT_K_D3Q_TRIG": "1",
+   "SPECPILOT_K_GDN_BV": "4",
+   "SPECPILOT_K_GDN_WY": "1",
+   "SPECPILOT_K_LOGITS_BF16": "1",
+   "SPECPILOT_K_WY_TUNE": "1",
+   "SPECPILOT_MM_SHM_REUSE_MB": "2048",
+   "SPECPILOT_PA_QADAPT": "len:10",
+   "SPECPILOT_PA_QPASSES": "2",
+   "SPECPILOT_RADIX_BRANCH": "0",
+   "SPECPILOT_RADIX_CKPT": "",
+   "SPECPILOT_TREE_GDN": "paths",
+   "SPECPILOT_TREE_MODE": "ddtree",
+   "SPECPILOT_TREE_TEMP": "1.5",
+   "SPECPILOT_X3_CONV_BN": "32",
+   "SPECPILOT_X3_FUSE_BA": "1",
+   "SPECPILOT_X3_NORM_ROWS": "64",
+   "SPECPILOT_X3_SPLIT_VIEWS": "1",
+   "SPECPILOT_X4_DRAFT_BLOCK": "16"
+  },
+  "path_env": {
+   "_comment": "set by scripts/serve.sh of this setting: {ENGINE} = the built engine tree, {PEAR_CALIB} = the calibration directory. Without PEAR_CALIB the two SPECPILOT_D3K_* switches are left out (plain RTN Q copy).",
+   "SPECPILOT_DE_VOCAB_FILE": "{ENGINE}/lab/pear_data/pear_generic_vocab_ranked.json",
+   "SPECPILOT_DE_VOCAB_SIZE": "131072",
+   "SPECPILOT_DE_VOCAB_SPARE": "2048",
+   "SPECPILOT_D3K_GPTQ": "{PEAR_CALIB}",
+   "SPECPILOT_D3K_QMAP": "gate_up=5;gate_up@0-15=4;in_proj=5;down@0-15=5;rest=6"
+  },
+  "calibration": {
+   "name": "hess_r",
+   "content_hash": "029035503129f133",
+   "files": "256 per-matrix Hessians <module>.H.pt + CONTENT_HASH; Q-copy codes are computed at first load into <dir>/codes"
+  }
+ },
+ "efficient_reasoning": {
+  "rule": "thr0.3+nohes+norep+retry",
+  "control_file": "PEARDR_CTL (JSON, re-read at every request start); written by scripts/rule.py",
+  "theta_min": 0.3,
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 0.95,
+   "top_k": -1,
+   "reasoning_effort": "xhigh"
+  }
+ },
+ "measured": {
+  "what": "LIBERO closed loop (spatial/object/goal, tasks 0-9, trials 0-1, seeds 1-2), 120 episodes paired with the recorded lossless F baseline",
+  "robot_clock_speedup_both_succeeded": "1.87x [1.59, 2.17]",
+  "success": "81.7% vs 81.7% (diff 0.0 pts [-5.0, +5.0])",
+  "tokens_per_episode": "15.6k vs 21.9k",
+  "same_night_lossless_control_vs_baseline_clock": "0.95x [0.88, 1.03] (60 episodes)",
+  "summary_file": "measured/cl2_summary.json"
+ }
+}

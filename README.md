@@ -87,6 +87,15 @@ at 2048 tokens, so these scores are a sanity check and not an accuracy evaluatio
 
 </details>
 
+### Additional setting: PEAR with efficient reasoning (lossy)
+
+[`settings/pro6000_c1_pear-qwen38-27b_dflash2_er`](settings/pro6000_c1_pear-qwen38-27b_dflash2_er) serves the PEAR robot
+reasoning model (Qwen3.8-27B + DFlash2, T=1, top-p 0.95) on SpecPilot's lossless F engine with an optional lossy decode
+rule: accept drafted tokens the target gives probability ≥ 0.3, do not sample hesitation words, never relax inside a
+repeated sequence. On LIBERO closed loop it makes the robot clock 1.87× [1.59, 2.17] faster at equal success (81.7% vs
+81.7% over 120 paired episodes). Unlike the six settings above it changes what the model writes, it was validated only
+on LIBERO, and it is not part of the paper's results.
+
 ## Quick start
 
 ```bash
@@ -188,6 +197,7 @@ in `settings/<setting>/config.json`: the `SPECPILOT_*` environment switches (`fi
 
 ```
 settings/<setting>/       README.md, config.json (models, stock and final configuration, paper numbers), files/
+                          (the PEAR setting adds scripts/, tests/ and measured/ for its closed-loop evaluation)
 python/                   stock engine (pruned SGLang)
 overlays/dspark_stock/    DSpark modules added to the stock engine for the DSpark settings
 research/env.sh           environment (paths, CUDA compat, caches); requirements.lock.txt: exact packages
