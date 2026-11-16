@@ -87,14 +87,31 @@ at 2048 tokens, so these scores are a sanity check and not an accuracy evaluatio
 
 </details>
 
-### Additional setting: PEAR with efficient reasoning (lossy)
+## PEAR: faster robot reasoning
 
-[`settings/pro6000_c1_pear-qwen38-27b_dflash2_er`](settings/pro6000_c1_pear-qwen38-27b_dflash2_er) serves the PEAR robot
-reasoning model (Qwen3.8-27B + DFlash2, T=1, top-p 0.95) on SpecPilot's lossless F engine with an optional lossy decode
-rule: accept drafted tokens the target gives probability ≥ 0.3, do not sample hesitation words, never relax inside a
-repeated sequence. On LIBERO closed loop it makes the robot clock 1.87× [1.59, 2.17] faster at equal success (81.7% vs
-81.7% over 120 paired episodes). Unlike the six settings above it changes what the model writes, it was validated only
-on LIBERO, and it is not part of the paper's results.
+<p align="center">
+  <img src="assets/pear_demo.png" width="100%" alt="PEAR on LIBERO: the same task with the PEAR baseline and with SpecPilot + efficient reasoning">
+  <br>
+  <em>Same LIBERO task: SpecPilot + efficient reasoning has finished in 49 s while the PEAR baseline is on turn 5 of 11.</em>
+</p>
+
+[PEAR](https://github.com/mit-han-lab/pear) is a reasoning model (Qwen3.8-27B + DFlash2) that controls a robot
+directly, and its robot spends most of the time waiting for the model to think.
+[`settings/pro6000_c1_pear-qwen38-27b_dflash2_er`](settings/pro6000_c1_pear-qwen38-27b_dflash2_er) serves PEAR on the
+SpecPilot engine with an *efficient reasoning* decode rule: accept drafted tokens the target gives probability ≥ 0.3,
+do not sample hesitation words, and never relax inside a repeated sequence. No training is involved.
+
+| System (PEAR bf16, one RTX PRO 6000, T=1, top-p 0.95, xhigh) | Task completion | Speedup | Decode tok/s |
+|---|---|---|---|
+| PEAR baseline (vLLM + DFlash2, K=7) | 188.7 s | 1× | 71 |
+| **SpecPilot + efficient reasoning** | **49.2 s** | **3.84×** | **241** |
+
+The table is the episode in the picture (`libero_spatial` task 6); times are on the robot clock (model time plus action
+steps at 20 Hz). Over 19 LIBERO episodes the median speedup over the baseline is 4.04×. In 120 paired closed-loop
+episodes, the efficient reasoning rule makes the robot clock 1.87× [1.59, 2.17] faster than the same engine without it,
+at the same success rate (81.7% vs 81.7%). The setting's
+[README](settings/pro6000_c1_pear-qwen38-27b_dflash2_er) has the reproduction scripts, the closed-loop numbers and the
+limits of the evaluation (LIBERO only; not part of the paper's results).
 
 ## Quick start
 

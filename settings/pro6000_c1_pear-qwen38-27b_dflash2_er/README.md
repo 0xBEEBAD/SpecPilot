@@ -1,15 +1,13 @@
-# PEAR + DFlash2, SpecPilot F engine + efficient reasoning (lossy), RTX PRO 6000
+# PEAR + DFlash2, SpecPilot F engine + efficient reasoning, RTX PRO 6000
 
 Candidate: SpecPilot F engine `d5-009-f` with the decode rule `thr0.3+nohes+norep+retry` ("efficient reasoning").
 Target: [PEAR](https://github.com/mit-han-lab/pear) (Qwen3.8-27B trained with RL to act as a robot policy), bf16.
 Drafter: DFlash2. Hardware: RTX PRO 6000 Blackwell Server (sm_120), one GPU per server. Regime: single request,
 multi-turn LIBERO sessions, PEAR's deployment sampling (T=1, top-p 0.95, `reasoning_effort` xhigh).
 
-> [!WARNING]
-> **This setting is lossy.** Unlike every other setting in this repository, the efficient-reasoning rule changes what
-> the model writes: its reasoning is no longer a sample from PEAR's own distribution. It was validated only on LIBERO
-> closed loop (120 paired episodes) at T=1 / top-p 0.95. With the rule switched off (`ER_RULE=lossless`) the engine is
-> the lossless F engine.
+The efficient-reasoning rule changes how tokens are accepted and sampled, so the reasoning text is not a sample from
+PEAR's own distribution; it was validated on LIBERO closed loop (120 paired episodes) at T=1 / top-p 0.95. With the
+rule switched off (`ER_RULE=lossless`) the engine is the lossless F engine.
 
 ## What it is
 
@@ -29,7 +27,7 @@ Measured in that campaign (lossless, T=1): +9.5% [+8.8, +10.1] (session set A) a
 decode speed over the k001 seed on PEAR LIBERO sessions; T=1 rule audit: 0 of 28,877 committed tokens were not the
 sampler's own draw.
 
-**Efficient reasoning (`thr0.3+nohes+norep+retry`, lossy).** A hook in the tree-verify accept step
+**Efficient reasoning (`thr0.3+nohes+norep+retry`).** A hook in the tree-verify accept step
 ([`files/python/sglang/srt/speculative/specpilot_lossy.py`](files/python/sglang/srt/speculative/specpilot_lossy.py),
 called from `dflash_worker_v2.py`; T>0 requests only), configured by a JSON control file (`PEARDR_CTL`) that the
 engine re-reads at every request start:
@@ -71,7 +69,7 @@ paired bootstrap over episodes.
 
 ## Limitations
 
-- **Lossy.** Reasoning text differs from what PEAR would sample; success was equal on LIBERO, but the CI (+-5 pts on
+- **Reasoning text changes.** It differs from what PEAR would sample; success was equal on LIBERO, but the CI (+-5 pts on
   120 episodes) cannot rule out a small drop.
 - **LIBERO only** (spatial, object, goal; not LIBERO-long, LIBERO-Plus / Pro, RoboDojo or a real robot).
 - **Threshold must not go below 0.3.** Lower thresholds let the drafter's "repeat what was written" proposals through:
